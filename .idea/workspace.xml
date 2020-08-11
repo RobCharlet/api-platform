@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="11f519cc-9aba-4711-b85b-8e5a66c0acd1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/CheeseListing.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/CheeseListing.php" afterDir="false" />
     </list>
@@ -144,7 +143,7 @@
       <option name="presentableId" value="Default" />
       <updated>1597048157168</updated>
       <workItem from="1597048158793" duration="10713000" />
-      <workItem from="1597132396075" duration="356000" />
+      <workItem from="1597132396075" duration="1713000" />
     </task>
     <servers />
   </component>

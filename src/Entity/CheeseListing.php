@@ -49,7 +49,7 @@ class CheeseListing
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"cheese_listing:read", "cheese_listing:write", "user:read"})
+     * @Groups({"cheese_listing:read", "cheese_listing:write", "user:read", "user:write"})
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min=2,
@@ -61,7 +61,7 @@ class CheeseListing
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"cheese_listing:read"})
+     * @Groups({"cheese_listing:read", "user:write"})
      * @Assert\NotBlank()
      */
     private $description;
@@ -69,7 +69,7 @@ class CheeseListing
     /**
      * The price of the cheese in cents
      *
-     * @Groups({"cheese_listing:read", "cheese_listing:write", "user:read"})
+     * @Groups({"cheese_listing:read", "cheese_listing:write", "user:read", "user:write"})
      * @ORM\Column(type="integer")
      * @Assert\NotBlank()
      * @Assert\GreaterThan(

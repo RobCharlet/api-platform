@@ -22,12 +22,12 @@
         "symfony/security-bundle": "5.1.*",
         "symfony/twig-bundle": "5.1.*",
         "symfony/validator": "5.1.*",
+        "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "5.1.*"
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.20",
         "symfony/stopwatch": "^5.1",
-        "symfony/twig-bundle": "^5.1",
         "symfony/web-profiler-bundle": "^5.1"
     },
     "config": {

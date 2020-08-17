@@ -12,6 +12,7 @@
 ###< environment ###
 .idea
 .DS_Store
+*.sql
 ###< environment ###
 
 ###> symfony/webpack-encore-bundle ###

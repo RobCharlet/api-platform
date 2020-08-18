@@ -1,18 +1,19 @@
 <?php
 
-
 namespace App\Tests\Functional;
-
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 
 class CheeseListingResourceTest extends ApiTestCase
 {
+    use ReloadDatabaseTrait;
+
     public function testCreateCheeseListing()
     {
-       $client = self::createClient();
+        $client = self::createClient();
 
         $client->request('POST', '/api/cheeses', [
             'headers' => ['Content-Type' => 'application/json'],

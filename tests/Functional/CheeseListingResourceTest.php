@@ -2,9 +2,8 @@
 
 namespace App\Tests\Functional;
 
-use App\Entity\User;
+use App\Entity\CheeseListing;
 use App\Test\CustomApiTestCase;
-use Doctrine\ORM\EntityManagerInterface;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 
 class CheeseListingResourceTest extends CustomApiTestCase
@@ -13,6 +12,8 @@ class CheeseListingResourceTest extends CustomApiTestCase
 
     public function testCreateCheeseListing()
     {
+        // Boot symfony container, who give access to service
+        // Must be the first line of the tests
         $client = self::createClient();
 
         $client->request('POST', '/api/cheeses', [
@@ -29,5 +30,37 @@ class CheeseListingResourceTest extends CustomApiTestCase
         ]);
         // Loggé mais JSON vide -> 400
         $this->assertResponseStatusCodeSame(400);
+    }
+
+    public function testUpdateCheeseListing()
+    {
+        $client = self::createClient();
+        $user1 = $this->createUser('updateUser1@test.com', 'foo');
+        $user2 = $this->createUser('updateUser2@test.com', 'foo');
+
+        $cheeseListing = new CheeseListing('Block of chedar');
+        $cheeseListing->setOwner($user1);
+        $cheeseListing->setDescription('Mmmm');
+        $cheeseListing->setPrice(1000);
+
+        $em = $this->getEntityManager();
+        $em->persist($cheeseListing);
+        $em->flush();
+
+        $this->logIn($client, 'updateUser2@test.com', 'foo');
+        $client->request('PUT', '/api/cheeses/'.$cheeseListing->getId(), [
+            'json' => [
+                'description' => 'titi'
+            ]
+        ]);
+        $this->assertResponseStatusCodeSame(403);
+
+        $this->logIn($client, 'updateUser1@test.com', 'foo');
+        $client->request('PUT', '/api/cheeses/'.$cheeseListing->getId(), [
+            'json' => [
+                'description' => 'titi'
+            ]
+        ]);
+        $this->assertResponseStatusCodeSame(200);
     }
 }

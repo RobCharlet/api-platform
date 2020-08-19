@@ -14,3 +14,4 @@ yarn watch
 # Lancement des tests
 ./bin/phpunit
 ./bin/phpunit --filter=fonctionTest
+./bin/phpunit tests/Functional/UserResourceTest.php

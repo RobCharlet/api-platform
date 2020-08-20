@@ -15,3 +15,6 @@ yarn watch
 ./bin/phpunit
 ./bin/phpunit --filter=fonctionTest
 ./bin/phpunit tests/Functional/UserResourceTest.php
+
+# Mise à jour base de test après migration
+./bin/console doctrine:schema:update --force --env=test

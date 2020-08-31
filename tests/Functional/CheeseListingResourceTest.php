@@ -3,7 +3,7 @@
 namespace App\Tests\Functional;
 
 use App\Entity\CheeseListing;
-use App\Test\CustomApiTestCase;
+use App\ApiPlatform\Test\CustomApiTestCase;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 
 class CheeseListingResourceTest extends CustomApiTestCase

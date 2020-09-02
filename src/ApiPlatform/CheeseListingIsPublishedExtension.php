@@ -8,9 +8,17 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInter
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use App\Entity\CheeseListing;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Security\Core\Security;
 
 class CheeseListingIsPublishedExtension implements QueryCollectionExtensionInterface
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     public function applyToCollection(
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
@@ -18,6 +26,10 @@ class CheeseListingIsPublishedExtension implements QueryCollectionExtensionInter
         string $operationName = null
     ) {
         if ($resourceClass !== CheeseListing::class) {
+            return;
+        }
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return;
         }
 

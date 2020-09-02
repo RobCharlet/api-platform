@@ -22,7 +22,8 @@ class CheeseListingResourceTest extends CustomApiTestCase
         ]);
         $this->assertResponseStatusCodeSame(401);
 
-        $this->createUserAndLogIn($client, 'phpunit@test.fr', 'foo');
+        $authenticatedUser = $this->createUserAndLogIn($client, 'phpunit@test.fr', 'foo');
+        $otherUser = $this->createUser('otheruser@test.com', 'foo');
 
         $client->request('POST', '/api/cheeses', [
             // On doit envoyer un data vide sinon JSON invalide
@@ -30,6 +31,22 @@ class CheeseListingResourceTest extends CustomApiTestCase
         ]);
         // Loggé mais JSON vide -> 400
         $this->assertResponseStatusCodeSame(400);
+
+        $cheesyData = [
+          'title' => 'Mystery cheese... kinda green',
+          'description' => 'What mysteries does it hold?',
+          'price' => 5000
+        ];
+
+        $client->request('POST', '/api/cheeses', [
+            'json' => $cheesyData + ['owner' => 'api/users/'.$otherUser->getId()]
+        ]);
+        $this->assertResponseStatusCodeSame(400, 'not passing the correct owner');
+
+        $client->request('POST', '/api/cheeses', [
+            'json' => $cheesyData + ['owner' => 'api/users/'.$authenticatedUser->getId()]
+        ]);
+        $this->assertResponseStatusCodeSame(201);
     }
 
     public function testUpdateCheeseListing()

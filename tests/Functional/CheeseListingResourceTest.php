@@ -25,18 +25,17 @@ class CheeseListingResourceTest extends CustomApiTestCase
         $authenticatedUser = $this->createUserAndLogIn($client, 'phpunit@test.fr', 'foo');
         $otherUser = $this->createUser('otheruser@test.com', 'foo');
 
+        $cheesyData = [
+            'title' => 'Mystery cheese... kinda green',
+            'description' => 'What mysteries does it hold?',
+            'price' => 5000
+        ];
+
         $client->request('POST', '/api/cheeses', [
             // On doit envoyer un data vide sinon JSON invalide
-            'json' => []
+            'json' => $cheesyData
         ]);
-        // Loggé mais JSON vide -> 400
-        $this->assertResponseStatusCodeSame(400);
-
-        $cheesyData = [
-          'title' => 'Mystery cheese... kinda green',
-          'description' => 'What mysteries does it hold?',
-          'price' => 5000
-        ];
+        $this->assertResponseStatusCodeSame(201);
 
         $client->request('POST', '/api/cheeses', [
             'json' => $cheesyData + ['owner' => 'api/users/'.$otherUser->getId()]

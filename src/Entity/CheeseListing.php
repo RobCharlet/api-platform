@@ -42,7 +42,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *       "formats"={"jsonld", "json", "html", "jsonhal", "csv"={"text/csv"}}
  *     }
  * )
- * @ORM\Entity(repositoryClass=CheeseListingRepository::class)
  * @ApiFilter(BooleanFilter::class, properties={"isPublished"})
  * @ApiFilter(SearchFilter::class, properties={
  *     "title": "partial",
@@ -52,6 +51,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * })
  * @ApiFilter(RangeFilter::class, properties={"price"})
  * @ApiFilter(PropertyFilter::class)
+ *
+ * @ORM\Entity(repositoryClass=CheeseListingRepository::class)
+ * @ORM\EntityListeners({"App\Doctrine\CheeseListingSetOwnerListener"})
  */
 class CheeseListing
 {

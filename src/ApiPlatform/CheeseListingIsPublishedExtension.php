@@ -22,7 +22,6 @@ class CheeseListingIsPublishedExtension implements QueryCollectionExtensionInter
         }
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
-        dd($rootAlias);
         $queryBuilder->andWhere(sprintf('%s.isPublished = :isPublished', $rootAlias))
             ->setParameter('isPublished', true);
     }

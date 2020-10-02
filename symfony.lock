@@ -557,5 +557,8 @@
     },
     "willdurand/negotiation": {
         "version": "v2.3.1"
+    },
+    "zenstruck/foundry": {
+        "version": "v1.1.3"
     }
 }

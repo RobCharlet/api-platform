@@ -19,10 +19,16 @@ use Zenstruck\Foundry\Proxy;
  */
 final class UserFactory extends ModelFactory
 {
+    const DEFAULT_PASSWORD = 'test';
+
     protected function getDefaults(): array
     {
         return [
-            // TODO add your default values here (https://github.com/zenstruck/foundry#model-factories)
+            'email' => self::faker()->email,
+            'username'=> self::faker()->userName,
+            // hashed version of "test"
+            // php bin/console security:encode-password --env=test
+            'password' => '$argon2id$v=19$m=65536,t=4,p=1$cyYUvoElqGqjrYMzq9QS9g$51OUbjQGz6YCYy5qfU1JRmYbnY/Lem/xmix9tjWoL1g'
         ];
     }
 

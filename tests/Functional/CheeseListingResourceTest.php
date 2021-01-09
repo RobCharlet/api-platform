@@ -92,6 +92,50 @@ class CheeseListingResourceTest extends CustomApiTestCase
         $this->assertResponseStatusCodeSame(200);
     }
 
+    public function testPublishCheeseListing()
+    {
+        $client = self::createClient();
+        $user1 = $this->createUser('updateUser1@test.com', 'foo');
+        $user2 = $this->createUser('updateUser2@test.com', 'foo');
+        $user3 = $this->createUser('updateUser3@test.com', 'foo');
+        $user3->setRoles(['ROLE_ADMIN']);
+
+        $cheeseListing = new CheeseListing('Block of chedar');
+        $cheeseListing->setOwner($user1);
+        $cheeseListing->setDescription('Mmmm');
+        $cheeseListing->setPrice(1000);
+        $cheeseListing->setIsPublished(true);
+
+        $em = $this->getEntityManager();
+        $em->persist($cheeseListing);
+        $em->flush();
+
+        $this->logIn($client, 'updateUser2@test.com', 'foo');
+        $client->request('PUT', '/api/cheeses/'.$cheeseListing->getId(), [
+            'json' => [
+                'description' => 'titi',
+                'owner' => '/api/users/'.$user2->getId()
+            ]
+        ]);
+        $this->assertResponseStatusCodeSame(403);
+
+        $this->logIn($client, 'updateUser3@test.com', 'foo');
+        $client->request('PUT', '/api/cheeses/'.$cheeseListing->getId(), [
+            'json' => [
+                'description' => 'titi'
+            ]
+        ]);
+        $this->assertResponseStatusCodeSame(200);
+
+        $this->logIn($client, 'updateUser1@test.com', 'foo');
+        $client->request('PUT', '/api/cheeses/'.$cheeseListing->getId(), [
+            'json' => [
+                'description' => 'titi'
+            ]
+        ]);
+        $this->assertResponseStatusCodeSame(200);
+    }
+
     public function testGetCheeseListingCollection()
     {
         $client = self::createClient();

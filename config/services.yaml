@@ -41,3 +41,7 @@ services:
 
     App\Doctrine\CheeseListingSetOwnerListener:
         tags: ['doctrine.orm.entity_listener']
+
+    App\DataPersister\UserDataPersister:
+        bind:
+            $dataPersister: '@api_platform.doctrine.orm.data_persister'

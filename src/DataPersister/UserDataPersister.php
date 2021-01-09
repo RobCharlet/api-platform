@@ -6,21 +6,18 @@ namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserDataPersister implements DataPersisterInterface
 {
-    private $entityManager;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $userPasswordEncoder;
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $userPasswordEncoder)
+    private $userPasswordEncoder;
+    private $dataPersister;
+
+    public function __construct($dataPersister, UserPasswordEncoderInterface $userPasswordEncoder)
     {
-        $this->entityManager = $entityManager;
         $this->userPasswordEncoder = $userPasswordEncoder;
+        $this->dataPersister = $dataPersister;
     }
 
     public function supports($data): bool
@@ -33,6 +30,9 @@ class UserDataPersister implements DataPersisterInterface
      */
     public function persist($data)
     {
+        /**
+         * Encode password before persist
+         */
         if ($data->getPlainPassword()) {
             $data->setPassword(
                 $this->userPasswordEncoder->encodePassword($data, $data->getPlainPassword())
@@ -41,13 +41,11 @@ class UserDataPersister implements DataPersisterInterface
             $data->eraseCredentials();
         }
 
-        $this->entityManager->persist($data);
-        $this->entityManager->flush();
+        $this->dataPersister->persist($data);
     }
 
     public function remove($data)
     {
-        $this->entityManager->remove($data);
-        $this->entityManager->flush();
+        $this->dataPersister->remove($data);
     }
 }

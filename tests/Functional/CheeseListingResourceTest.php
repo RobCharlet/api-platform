@@ -78,7 +78,26 @@ class CheeseListingResourceTest extends CustomApiTestCase
         $this->assertResponseStatusCodeSame(200);
     }
 
+    public function testPublishCheeseListing()
+    {
+        $client = self::createClient();
+        $user = UserFactory::new()->create();
 
+        $cheeseListing = CheeseListingFactory::new()->create([
+            'owner' => $user
+        ]);
+
+        $this->logIn($client, $user);
+        $client->request('PUT', '/api/cheeses/'.$cheeseListing->getId(), [
+            'json' => [
+                'isPublished' => true,
+            ]
+        ]);
+        $this->assertResponseStatusCodeSame(200);
+        // Update entity with latest data
+        $cheeseListing->refresh();
+        $this->assertTrue($cheeseListing->getIsPublished());
+    }
 
     public function testGetCheeseListingCollection()
     {

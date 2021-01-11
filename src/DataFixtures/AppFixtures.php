@@ -23,12 +23,12 @@ class AppFixtures extends Fixture
         $user = UserFactory::new()->create([
             'email' => 'cheesefan@example.com',
             'username' => 'cheesefan',
-            'password' => $this->passwordEncoder->encodePassword(new User(), 'cheese')
+            'password' => $this->passwordEncoder->encodePassword(new User(), 'cheese'),
         ]);
         UserFactory::new()->createMany(50);
 
         $listingFactory = CheeseListingFactory::new([
-            'owner' => $user
+            'owner' => $user,
         ])
             ->published();
 

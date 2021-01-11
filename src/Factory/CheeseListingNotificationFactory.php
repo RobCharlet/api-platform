@@ -24,7 +24,7 @@ final class CheeseListingNotificationFactory extends ModelFactory
     {
         return [
             'cheeseListing' => CheeseListingFactory::new(),
-            'notificationText' => self::faker()->realText(50)
+            'notificationText' => self::faker()->realText(50),
         ];
     }
 

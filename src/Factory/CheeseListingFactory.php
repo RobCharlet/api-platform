@@ -47,7 +47,7 @@ final class CheeseListingFactory extends ModelFactory
         // see https://github.com/zenstruck/foundry#initialization
         return $this
             // ->beforeInstantiate(function(CheeseListing $cheeseListing) {})
-        ;
+            ;
     }
 
     protected static function getClass(): string

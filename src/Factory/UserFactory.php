@@ -25,10 +25,10 @@ final class UserFactory extends ModelFactory
     {
         return [
             'email' => self::faker()->email,
-            'username'=> self::faker()->userName,
+            'username' => self::faker()->userName,
             // hashed version of "test"
             // php bin/console security:encode-password --env=test
-            'password' => '$argon2id$v=19$m=65536,t=4,p=1$cyYUvoElqGqjrYMzq9QS9g$51OUbjQGz6YCYy5qfU1JRmYbnY/Lem/xmix9tjWoL1g'
+            'password' => '$argon2id$v=19$m=10,t=3,p=1$eyXPWiQFWUO901E78Bb3UQ$hyu9dFDz7fo2opQyCSoX/NfJDvEpzER/a+WbiAagqqw',
         ];
     }
 
@@ -37,7 +37,7 @@ final class UserFactory extends ModelFactory
         // see https://github.com/zenstruck/foundry#initialization
         return $this
             // ->beforeInstantiate(function(User $user) {})
-        ;
+            ;
     }
 
     protected static function getClass(): string

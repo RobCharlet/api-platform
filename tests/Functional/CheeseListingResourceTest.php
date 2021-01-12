@@ -2,8 +2,8 @@
 
 namespace App\Tests\Functional;
 
-use App\Entity\CheeseListing;
 use App\Factory\CheeseListingFactory;
+use App\Factory\CheeseListingNotificationFactory;
 use App\Factory\UserFactory;
 use App\Test\CustomApiTestCase;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -64,7 +64,8 @@ class CheeseListingResourceTest extends CustomApiTestCase
         $client->request('PUT', '/api/cheeses/'.$cheeseListing->getId(), [
             'json' => [
                 'title' => 'updated',
-                'owner' => '/api/users/'.$user2->getId()
+                'owner' => '/api/users/'.$user2->getId(),
+
             ]
         ]);
         $this->assertResponseStatusCodeSame(403, 'only author can updated');
@@ -72,10 +73,11 @@ class CheeseListingResourceTest extends CustomApiTestCase
         $this->logIn($client, $user1);
         $client->request('PUT', '/api/cheeses/'.$cheeseListing->getId(), [
             'json' => [
-                'title' => 'updated',
+                'title' => 'updated'
             ]
         ]);
         $this->assertResponseStatusCodeSame(200);
+
     }
 
     public function testPublishCheeseListing()
@@ -89,14 +91,23 @@ class CheeseListingResourceTest extends CustomApiTestCase
 
         $this->logIn($client, $user);
         $client->request('PUT', '/api/cheeses/'.$cheeseListing->getId(), [
+            'json' => ['isPublished' => true]
+        ]);
+        $this->assertResponseStatusCodeSame(200);
+        $cheeseListing->refresh();
+        $this->assertTrue($cheeseListing->getIsPublished());
+        CheeseListingNotificationFactory::repository()->assertCount(
+            1,
+            'There should be one notification'
+        );
+
+        // Publish should not publish a second notification
+        $client->request('PUT', '/api/cheeses/'.$cheeseListing->getId(), [
             'json' => [
                 'isPublished' => true,
             ]
         ]);
-        $this->assertResponseStatusCodeSame(200);
-        // Update entity with latest data
-        $cheeseListing->refresh();
-        $this->assertTrue($cheeseListing->getIsPublished());
+        CheeseListingNotificationFactory::repository()->assertCount(1);
     }
 
     public function testGetCheeseListingCollection()

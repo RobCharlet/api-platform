@@ -18,9 +18,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
+ *     normalizationContext={"groups"={"cheese:read"}},
+ *     denormalizationContext={"groups"={"cheese:write"}},
  *     itemOperations={
  *          "get"={
- *              "normalization_context"={"groups"={"cheese_listing:read", "cheese_listing:item:get"}},
+ *              "normalization_context"={"groups"={"cheese:read", "cheese:item:get"}},
  *          },
  *          "put"={
  *              "security" = "is_granted('EDIT', object)",
@@ -186,9 +188,9 @@ class CheeseListing
     }
 
     /**
-     * How long ago in text this ch
+     * How long ago in text that this cheese listing was added.
      *
-     * @Groups({"cheese:read"})
+     * @Groups("cheese:read")
      */
     public function getCreatedAtAgo(): string {
         return Carbon::instance($this->getCreatedAt())->diffForHumans();
@@ -199,6 +201,11 @@ class CheeseListing
         return $this->isPublished;
     }
 
+    /**
+     * How long ago in text this ch
+     *
+     * @Groups({"cheese:read", "cheese:write"})
+     */
     public function setIsPublished(bool $isPublished): self
     {
         $this->isPublished = $isPublished;

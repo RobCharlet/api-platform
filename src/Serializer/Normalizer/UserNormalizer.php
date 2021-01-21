@@ -38,11 +38,7 @@ class UserNormalizer implements ContextAwareNormalizerInterface, CacheableSuppor
         // Prevent infinite loop
         $context[self::ALREADY_CALLED] = true;
 
-        $data = $this->normalizer->normalize($object, $format, $context);
-
-        $data['isMe'] = $isOwner;
-
-        return $data;
+        return $this->normalizer->normalize($object, $format, $context);
     }
 
     public function supportsNormalization($data, string $format = null, array $context = [])

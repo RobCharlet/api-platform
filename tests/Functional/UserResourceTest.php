@@ -2,7 +2,6 @@
 
 namespace App\Tests\Functional;
 
-use App\Entity\User;
 use App\Factory\UserFactory;
 use App\Test\CustomApiTestCase;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -57,6 +56,8 @@ class UserResourceTest extends CustomApiTestCase
         $this->logIn($client, $authenticatedUser);
 
         $client->request('GET', '/api/users/'.$user->getId());
+        $this->assertResponseStatusCodeSame(200);
+
         $this->assertJsonContains([
             'username' => $user->getUsername()
         ]);

@@ -3,29 +3,31 @@
 
 namespace App\DataPersister;
 
-
-use ApiPlatform\Core\Bridge\Doctrine\Common\DataPersister;
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use App\Entity\User;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Security;
 
 class UserDataPersister implements ContextAwareDataPersisterInterface
 {
     private $userPasswordEncoder;
     private $decoratedDataPersister;
     private $logger;
+    private $security;
 
     public function __construct(
         DataPersisterInterface $decoratedDataPersister,
         UserPasswordEncoderInterface $userPasswordEncoder,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Security $security
     )
     {
         $this->userPasswordEncoder = $userPasswordEncoder;
         $this->decoratedDataPersister = $decoratedDataPersister;
         $this->logger = $logger;
+        $this->security = $security;
     }
 
     public function supports($data, array $context= []): bool
@@ -62,6 +64,11 @@ class UserDataPersister implements ContextAwareDataPersisterInterface
 
             $data->eraseCredentials();
         }
+
+        /**
+         * Set isMe (which is not persisted in the DB)
+         */
+        $data->setIsMe($this->security->getUser() === $data);
 
         $this->decoratedDataPersister->persist($data);
     }

@@ -18,6 +18,8 @@ class SetIsMeOnCurrentUserSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(RequestEvent $event)
     {
+        //dd($event->getRequest()->attributes->get('data'));
+
         // If is not a sub-request
         if(!$event->isMasterRequest()) {
             return;

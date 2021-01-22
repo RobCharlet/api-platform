@@ -40,8 +40,8 @@ class UserDataProvider implements
         if(!$user) {
             return null;
         }
-
-        $user->setIsMe($currentUser === $user);
+        // Now handled in a listener
+        //$user->setIsMe($currentUser === $user);
 
         return $user;
     }
@@ -55,7 +55,8 @@ class UserDataProvider implements
         $currentUser = $this->security->getUser();
 
         foreach ($users as $user) {
-                $user->setIsMe($currentUser === $user);
+            // Now handled in a listener
+            //$user->setIsMe($currentUser === $user);
         }
         
         return $users;

@@ -68,7 +68,8 @@ class UserDataPersister implements ContextAwareDataPersisterInterface
         /**
          * Set isMe (which is not persisted in the DB)
          */
-        $data->setIsMe($this->security->getUser() === $data);
+        // Now handled in a listener
+//        $data->setIsMe($this->security->getUser() === $data);
 
         $this->decoratedDataPersister->persist($data);
     }

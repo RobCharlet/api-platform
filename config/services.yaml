@@ -34,10 +34,10 @@ services:
         decorates    : 'api_platform.serializer.context_builder'
         arguments    : [ '@App\Serializer\AdminGroupsContextBuilder.inner' ]
 
-    App\ApiPlatform\AutoGroupResourceMetadataFactory:
-        decorates: 'api_platform.metadata.resource.metadata_factory'
-        arguments: [ '@App\ApiPlatform\AutoGroupResourceMetadataFactory.inner' ]
-        decoration_priority: -20 #fix cache issues (cache decorator is -10)
+#    App\ApiPlatform\AutoGroupResourceMetadataFactory:
+#        decorates: 'api_platform.metadata.resource.metadata_factory'
+#        arguments: [ '@App\ApiPlatform\AutoGroupResourceMetadataFactory.inner' ]
+#        decoration_priority: -20 #fix cache issues (cache decorator is -10)
 
     App\Doctrine\CheeseListingSetOwnerListener:
         tags: ['doctrine.orm.entity_listener']

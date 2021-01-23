@@ -18,5 +18,6 @@ api_platform:
         jsonhal:
             mime_types:
                 - application/hal+json
+    path_segment_name_generator: api_platform.path_segment_name_generator.dash
 
 

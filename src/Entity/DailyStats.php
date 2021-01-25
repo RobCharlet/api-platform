@@ -5,12 +5,12 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Action\NotFoundAction;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"daily-stats:read"}},
+ *     paginationItemsPerPage=7,
  *     itemOperations={"get"},
  *     collectionOperations={"get"}
  * )

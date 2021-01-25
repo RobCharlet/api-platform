@@ -11,14 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"daily-stats:read"}},
- *     itemOperations={
- *      "get"={
- *          "method"="GET",
- *          "controller"=NotFoundAction::class,
- *          "read"=false,
- *          "output"=false
- *      },
- *     },
+ *     itemOperations={"get"},
  *     collectionOperations={"get"}
  * )
  */
@@ -46,7 +39,7 @@ class DailyStats
     // needed to get an array of CheeseListing iri and not an array of objects
     // in serialization (|CheeseListing[] is for phpstorm autocompletion).
     public function __construct(
-        \DateTime $date,
+        \DateTimeImmutable $date,
         int $totalVisitors,
         array $mostPopularListings
     )

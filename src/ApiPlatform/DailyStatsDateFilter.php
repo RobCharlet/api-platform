@@ -3,11 +3,18 @@
 namespace App\ApiPlatform;
 
 use ApiPlatform\Core\Serializer\Filter\FilterInterface;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 
 class DailyStatsDateFilter implements FilterInterface
 {
     public const FROM_FILTER_CONTEXT = 'daily_stats_from';
+    private $throwOnInvalid;
+
+    public function __construct(bool $throwOnInvalid = false)
+    {
+        $this->throwOnInvalid = $throwOnInvalid;
+    }
 
     public function apply(Request $request, bool $normalization, array $attributes, array &$context)
     {
@@ -18,6 +25,11 @@ class DailyStatsDateFilter implements FilterInterface
         }
 
         $fromDate = \DateTimeImmutable::createFromFormat('Y-m-d', $from);
+
+        if (!$fromDate && $this->throwOnInvalid) {
+            throw new BadRequestException('Invalid "from" data format');
+        }
+
         if($fromDate) {
             $fromDate->setTime(0,0,0);
 

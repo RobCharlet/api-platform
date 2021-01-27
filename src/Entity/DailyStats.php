@@ -17,7 +17,7 @@ use App\ApiPlatform\DailyStatsDateFilter;
  *     itemOperations={"get", "put"},
  *     collectionOperations={"get"}
  * )
- * @ApiFilter(DailyStatsDateFilter::class)
+ * @ApiFilter(DailyStatsDateFilter::class, arguments={"throwOnInvalid"=true})
  */
 class DailyStats
 {

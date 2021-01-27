@@ -39,6 +39,7 @@ class DailyStatsPaginator implements PaginatorInterface, \IteratorAggregate
 
     public function getTotalItems(): float
     {
+        // TODO: Return true count if "from" filter is used
         return $this->statsHelper->count();
     }
 

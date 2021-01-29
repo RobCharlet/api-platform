@@ -18,10 +18,10 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- *
  * @ApiResource(
  *     security="is_granted('ROLE_USER')",
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}},
  *     collectionOperations={
  *         "get",
  *         "post" = {
@@ -34,13 +34,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         "put" = {"security" = "is_granted('ROLE_USER') and object == user"},
  *         "delete" = {"security" = "is_granted('ROLE_ADMIN')"},
  *     },
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}},
  * )
  * @ApiFilter(PropertyFilter::class)
  * @UniqueEntity(fields={"username"})
  * @UniqueEntity(fields={"email"})
  * @ORM\EntityListeners({UserSetIsMvpListener::class})
+ * @ORM\Entity(repositoryClass=UserRepository::class)
  */
 class User implements UserInterface
 {
@@ -61,7 +60,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"admin:write"})
+     * @Groups({"admin:read", "admin:write"})
      */
     private $roles = [];
 

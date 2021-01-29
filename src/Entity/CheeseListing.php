@@ -13,14 +13,14 @@ use App\Repository\CheeseListingRepository;
 use App\Validator\IsValidOwner;
 use App\Validator\ValidIsPublished;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Dto\CheeseListingOutput;
+use App\Dto\CheeseListingInput;
 
 /**
  * @ApiResource(
- *     output=CheeseListingOutput::class,
+ *     output=CheeseListingOutput::CLASS,
+ *     input=CheeseListingInput::CLASS,
  *     normalizationContext={"groups"={"cheese:read"}},
  *     denormalizationContext={"groups"={"cheese:write"}},
  *     itemOperations={
@@ -38,7 +38,8 @@ use App\Dto\CheeseListingOutput;
  *     collectionOperations={
  *          "get",
  *          "post"={
- *              "security" = "is_granted('ROLE_USER')"
+ *              "security" = "is_granted('ROLE_USER')",
+ *              "denormalization_context"={"groups"={"cheese:write", "cheese:collection:post"}},
  *          }
  *     },
  *     shortName="cheese",
@@ -73,7 +74,6 @@ class CheeseListing
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"cheese:write", "user:write"})
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min=2,
@@ -85,7 +85,6 @@ class CheeseListing
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"user:write"})
      * @Assert\NotBlank()
      */
     private $description;
@@ -93,23 +92,17 @@ class CheeseListing
     /**
      * The price of the cheese in cents
      *
-     * @Groups({"cheese:write", "user:write"})
      * @ORM\Column(type="integer")
      * @Assert\NotBlank()
-     * @Assert\GreaterThan(
-     *     value = 0
-     * )
      */
     private $price;
 
     /**
-     * @Groups({"cheese:write"})
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
     /**
-     * @Groups({"cheese:write"})
      * @ORM\Column(type="boolean")
      */
     private $isPublished = false;
@@ -117,7 +110,6 @@ class CheeseListing
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="cheeseListings")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"cheese:read", "cheese:collection:post"})
      * @IsValidOwner()
      */
     private $owner;
@@ -149,19 +141,6 @@ class CheeseListing
         return $this;
     }
 
-    /**
-     * The description of the cheese as raw text.
-     *
-     * @Groups({"cheese:write"})
-     * @SerializedName("description")
-     */
-    public function setTextDescription(string $description): self
-    {
-        $this->description = nl2br($description);
-
-        return $this;
-    }
-
     public function getPrice(): ?int
     {
         return $this->price;
@@ -184,11 +163,6 @@ class CheeseListing
         return $this->isPublished;
     }
 
-    /**
-     * How long ago in text this ch
-     *
-     * @Groups({"cheese:write"})
-     */
     public function setIsPublished(bool $isPublished): self
     {
         $this->isPublished = $isPublished;

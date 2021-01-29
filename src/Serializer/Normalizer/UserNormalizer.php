@@ -14,9 +14,7 @@ class UserNormalizer implements ContextAwareNormalizerInterface, CacheableSuppor
     use NormalizerAwareTrait;
 
     private const ALREADY_CALLED = 'USER_NORMALIZER_ALREADY_CALLED';
-    /**
-     * @var Security
-     */
+
     private $security;
 
     public function __construct(Security $security)

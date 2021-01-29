@@ -12,7 +12,6 @@ use App\ApiPlatform\CheeseSearchFilter;
 use App\Repository\CheeseListingRepository;
 use App\Validator\IsValidOwner;
 use App\Validator\ValidIsPublished;
-use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
@@ -74,7 +73,7 @@ class CheeseListing
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"cheese:read", "cheese:write", "user:read", "user:write"})
+     * @Groups({"cheese:write", "user:write"})
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min=2,
@@ -86,7 +85,7 @@ class CheeseListing
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"cheese:read", "user:write"})
+     * @Groups({"user:write"})
      * @Assert\NotBlank()
      */
     private $description;
@@ -94,7 +93,7 @@ class CheeseListing
     /**
      * The price of the cheese in cents
      *
-     * @Groups({"cheese:read", "cheese:write", "user:read", "user:write"})
+     * @Groups({"cheese:write", "user:write"})
      * @ORM\Column(type="integer")
      * @Assert\NotBlank()
      * @Assert\GreaterThan(
@@ -144,19 +143,6 @@ class CheeseListing
         return $this->description;
     }
 
-    /**
-     * @Groups({"cheese:read"})
-     */
-    public function getShortDescription(): ?string
-    {
-        if (strlen($this->description) < 20) {
-            return $this->description;
-        }
-
-        $description = strip_tags($this->description);
-        return substr($description,0, 20).'...';
-    }
-
     public function setDescription(string $description): self {
         $this->description = $description;
 
@@ -193,15 +179,6 @@ class CheeseListing
         return $this->createdAt;
     }
 
-    /**
-     * How long ago in text that this cheese listing was added.
-     *
-     * @Groups("cheese:read")
-     */
-    public function getCreatedAtAgo(): string {
-        return Carbon::instance($this->getCreatedAt())->diffForHumans();
-    }
-
     public function getIsPublished(): ?bool
     {
         return $this->isPublished;
@@ -210,7 +187,7 @@ class CheeseListing
     /**
      * How long ago in text this ch
      *
-     * @Groups({"cheese:read", "cheese:write"})
+     * @Groups({"cheese:write"})
      */
     public function setIsPublished(bool $isPublished): self
     {

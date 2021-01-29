@@ -2,13 +2,14 @@
 
 namespace App\Dto;
 
+use App\Entity\User;
 use Carbon\Carbon;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 class CheeseListingOutput
 {
     /**
-     * @Groups({"cheese:read"})
+     * @Groups({"cheese:read", "user:read"})
      * @var string $title
      */
     public $title;
@@ -20,15 +21,18 @@ class CheeseListingOutput
     public $description;
 
     /**
-     * @Groups({"cheese:read"})
+     * @Groups({"cheese:read", "user:read"})
      * @var int $price
      */
     public $price;
 
-    /**
-     * @var \DateTimeImmutable $createdAt
-     */
     public $createdAt;
+
+    /**
+     * @Groups({"cheese:read"})
+     * @var User
+     */
+    public $owner;
 
     /**
      * @Groups({"cheese:read"})

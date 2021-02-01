@@ -10,10 +10,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use App\ApiPlatform\CheeseSearchFilter;
 use App\Repository\CheeseListingRepository;
-use App\Validator\IsValidOwner;
 use App\Validator\ValidIsPublished;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use App\Dto\CheeseListingOutput;
 use App\Dto\CheeseListingInput;
 

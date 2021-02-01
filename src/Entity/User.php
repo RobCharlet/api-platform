@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -48,12 +49,16 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @ApiProperty(identifier=false)
      */
     private $id;
 
     /**
      * @ORM\Column(type="uuid", unique=true)
+     * @ApiProperty(identifier=true)
      */
+    // We keep $id cause string as identifier in MySQL could cause
+    // performance problems (no problem with PostGre)
     private $uuid;
 
     /**
@@ -302,4 +307,10 @@ class User implements UserInterface
     {
         $this->isMvp = $isMvp;
     }
+
+    public function getUuid(): UuidInterface
+    {
+        return $this->uuid;
+    }
+
 }

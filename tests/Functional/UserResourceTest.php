@@ -23,6 +23,12 @@ class UserResourceTest extends CustomApiTestCase
         ]);
         $this->assertResponseStatusCodeSame(201);
 
+        $user = UserFactory::repository()->findOneBy(['email' => 'createUser@test.fr']);
+        $this->assertNotNull($user);
+        $this->assertJsonContains([
+            '@id' => '/api/users/'.$user->getUuid()->toString()
+        ]);
+
         $this-> logIn($client, 'createUser@test.fr', 'brie');
     }
 
@@ -33,7 +39,7 @@ class UserResourceTest extends CustomApiTestCase
         $user = UserFactory::new()->create();
         $this->logIn($client, $user);
 
-        $client->request('PUT', 'api/users/'.$user->getId(), [
+        $client->request('PUT', 'api/users/'.$user->getUuid(), [
             'json' => [
                 'username' => 'newusername',
                 'roles' => ['ROLE_ADMIN'] // will be ignored
@@ -58,7 +64,7 @@ class UserResourceTest extends CustomApiTestCase
         $authenticatedUser = UserFactory::new()->create();
         $this->logIn($client, $authenticatedUser);
 
-        $client->request('GET', '/api/users/'.$user->getId());
+        $client->request('GET', '/api/users/'.$user->getUuid());
         $this->assertResponseStatusCodeSame(200);
 
         $this->assertJsonContains([
@@ -80,7 +86,7 @@ class UserResourceTest extends CustomApiTestCase
         // Must relogin to handle admin status
         $this->logIn($client, $user);
 
-        $client->request('GET', '/api/users/'.$user->getId());
+        $client->request('GET', '/api/users/'.$user->getUuid());
         $this->assertJsonContains([
             'phoneNumber' => '555.123.4567',
             'isMe' => true

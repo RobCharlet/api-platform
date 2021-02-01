@@ -56,6 +56,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="uuid", unique=true)
      * @ApiProperty(identifier=true)
+     * @Groups({"user:write"})
      */
     // We keep $id cause string as identifier in MySQL could cause
     // performance problems (no problem with PostGre)
@@ -122,10 +123,10 @@ class User implements UserInterface
      */
     private $isMvp = false;
 
-    public function __construct()
+    public function __construct(UuidInterface $uuid = null)
     {
         $this->cheeseListings = new ArrayCollection();
-        $this->uuid = Uuid::uuid4();
+        $this->uuid = $uuid ? $uuid : Uuid::uuid4();
     }
 
     public function getId(): ?int

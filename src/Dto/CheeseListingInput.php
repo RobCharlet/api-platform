@@ -6,8 +6,10 @@ namespace App\Dto;
 
 use App\Entity\CheeseListing;
 use App\Entity\User;
+use App\Validator\IsValidOwner;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class CheeseListingInput
 {
@@ -15,6 +17,12 @@ class CheeseListingInput
      * @var string
      *
      * @Groups({"cheese:write", "user:write"})
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min=2,
+     *     max=50,
+     *     maxMessage="Describe your cheeses with 50 chars or less"
+     * )
      */
     public $title;
 
@@ -22,12 +30,14 @@ class CheeseListingInput
      * @var int
      *
      * @Groups({"cheese:write", "user:write"})
+     * @Assert\NotBlank()
      */
     public $price;
 
     /**
      * @var User
      * @Groups({"cheese:collection:post"})
+     * @IsValidOwner()
      */
     public $owner;
 
@@ -37,6 +47,9 @@ class CheeseListingInput
      */
     public $isPublished = false;
 
+    /**
+     * @Assert\NotBlank()
+     */
     public $description;
 
     public static function createFromEntity(?CheeseListing $cheeseListing): self
